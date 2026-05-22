@@ -1,4 +1,4 @@
-package com.immobilier.gestionImmobiliere.server.user.jwt;
+package com.immobilier.gestionImmobiliere.modules.user.jwt;
 
 
 import io.jsonwebtoken.Claims;

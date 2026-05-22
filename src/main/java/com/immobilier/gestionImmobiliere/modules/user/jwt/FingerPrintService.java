@@ -1,4 +1,4 @@
-package com.immobilier.gestionImmobiliere.server.user.jwt;
+package com.immobilier.gestionImmobiliere.modules.user.jwt;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
     public class FingerPrintService {
