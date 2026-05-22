@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
     public class FingerPrintService {
 
         private static final Logger log =  LoggerFactory.getLogger(FingerPrintService.class);
-        private final Map<String, DeviceInfo> knownDevices = new ConcurrentHashMap<>();
 
         @Value("${finger.secret.key}")
         private String fingerSecret;
