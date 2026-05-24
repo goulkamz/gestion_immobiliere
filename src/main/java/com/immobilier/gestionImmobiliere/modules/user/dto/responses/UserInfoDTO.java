@@ -11,7 +11,7 @@ import java.util.List;
     public class UserInfoDTO {
 
         private String username;
-
+        private String token;
         private List<String> roles;
 
 

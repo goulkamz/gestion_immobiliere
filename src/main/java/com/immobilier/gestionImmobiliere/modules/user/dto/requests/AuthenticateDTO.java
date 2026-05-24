@@ -10,12 +10,11 @@ import lombok.Data;
 
 public class AuthenticateDTO {
 
-    @NotNull
-    @NotBlank
-    private String username;
+    @NotBlank(message = "L'email est obligatoire")
+    private String email;  // ← utiliser "email" au lieu de "username"
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;
 
+    public String getUsername(){return email;}
 }

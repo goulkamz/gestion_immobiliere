@@ -9,13 +9,19 @@ import com.immobilier.gestionImmobiliere.modules.user.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RestController
 public class UserController implements AuthentificationAPI {
 
     @Autowired
@@ -23,20 +29,9 @@ public class UserController implements AuthentificationAPI {
 
     @Override
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticateDTO authenticateDTO) {
-
-        UserDetailsImpl user = userService.authenticateUser(authenticateDTO);
-        Map<String, Object> extraClaims = new HashMap<>();
-        String jwtCookie = userService.generateJwtCookie(user,extraClaims);
-        List<String> roles = userService.getUserRoles(user);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie) // JWT ajouté en cookie
-                .body(UserInfoDTO.builder()
-                        .username(user.getUsername())
-                        .roles(roles)
-                        .build());
-
-
+        return userService.authenticateUser(authenticateDTO);
     }
+
 
     @Override
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) {

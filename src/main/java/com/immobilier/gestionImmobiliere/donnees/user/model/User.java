@@ -24,7 +24,7 @@ import java.util.Date;
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "iduser")
+        @Column(name = "idUser")
         private Integer idUser;
 
         @Column(name = "nom", length = 254)
@@ -33,19 +33,19 @@ import java.util.Date;
         @Column(name = "prenom", length = 254)
         private String prenom;
 
-        @Column(name = "sexe", columnDefinition = "character(1)")
-        private String sexe;
+        @Column(name = "sexe")
+        private Character sexe;
 
         @Column(name = "email",unique = true, length = 254)
         private String email;
 
         @NotBlank
         @Size(max = 120)
-        @Column(name = "password")
+        @Column(name = "mot_de_passe")
         @JsonIgnore
         private String password;
 
-        @Column(name = "datenaissance")
+        @Column(name = "date_naissance")
         @Temporal(TemporalType.DATE)
         private Date dateNaissance;
 
@@ -55,19 +55,19 @@ import java.util.Date;
         @Column(name = "telephone1",unique = true, length = 254)
         private String telephone1;
 
-        @Column(name = "flagactif", columnDefinition = "character(1)")
-        private String flagActif;
+        @Column(name = "flag_actif")
+        private boolean flagActif;
 
-        @Column(name = "datecreate")
+        @Column(name = "date_create")
         @Temporal(TemporalType.DATE)
         private Date dateCreate;
 
-        @Column(name = "datelastlogin")
+        @Column(name = "date_last_login")
         @Temporal(TemporalType.DATE)
         private Date dateLastLogin;
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "idrole", nullable = false)
+        @JoinColumn(name = "id_role", nullable = false)
         private Role role;
 
         // Méthode utilitaire pour Spring Security (username = email)
@@ -84,7 +84,7 @@ import java.util.Date;
 
         // Vérifier si l'utilisateur est actif
         public boolean isActive() {
-            return "1".equals(flagActif) || "O".equalsIgnoreCase(flagActif) || "Y".equalsIgnoreCase(flagActif);
+            return flagActif;
         }
 
         public User (){};

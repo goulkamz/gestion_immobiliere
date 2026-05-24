@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "idrole")
+        @Column(name = "id_role")
         private Integer idRole;
 
         @Enumerated(EnumType.STRING)
-        @Column(name = "libellerole", length = 254)
+        @Column(name = "libelle_role", length = 254)
         private ERole libelleRole;
 
         // Méthode utilitaire pour obtenir le nom du rôle (compatible Spring Security)
