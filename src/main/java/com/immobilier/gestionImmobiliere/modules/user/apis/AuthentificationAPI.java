@@ -1,7 +1,9 @@
 package com.immobilier.gestionImmobiliere.modules.user.apis;
 
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ActivateUserDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.AuthenticateDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.CreateUserDTO;
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ResendCodeEmailDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +22,9 @@ public interface AuthentificationAPI {
         ResponseEntity<?> createUser(@Valid CreateUserDTO createUserDTO) throws Exception;
 
         @PostMapping("/activation")
-        ResponseEntity<?> activateUser(@Valid Map<String,String> activationCode);
+        ResponseEntity<?> activateUser(@Valid ActivateUserDTO activateUserDTO);
 
         @PostMapping("/resend-code")
-        ResponseEntity<?> resendCode(@Valid String email);
+        ResponseEntity<?> resendCode(@Valid ResendCodeEmailDTO email);
 
 }

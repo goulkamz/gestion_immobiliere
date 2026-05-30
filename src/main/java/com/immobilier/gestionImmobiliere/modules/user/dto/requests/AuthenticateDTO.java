@@ -14,7 +14,7 @@ public class AuthenticateDTO {
 
     @NotBlank(message = "L'email est obligatoire")
     @JsonAlias({"username", "userName", "email", "telephone"})
-    private String email;  // ← utiliser "email" au lieu de "username"
+    private String email;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
     private String password;

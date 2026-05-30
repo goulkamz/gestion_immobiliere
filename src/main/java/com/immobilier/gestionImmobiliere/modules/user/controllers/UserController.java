@@ -1,8 +1,10 @@
 package com.immobilier.gestionImmobiliere.modules.user.controllers;
 
 import com.immobilier.gestionImmobiliere.modules.user.apis.AuthentificationAPI;
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ActivateUserDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.AuthenticateDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.CreateUserDTO;
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ResendCodeEmailDTO;
 import com.immobilier.gestionImmobiliere.modules.user.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,12 @@ public class UserController implements AuthentificationAPI {
     }
 
     @Override
-    public ResponseEntity<?> activateUser(@Valid @RequestBody Map<String, String> activationCode) {
+    public ResponseEntity<?> activateUser(@Valid @RequestBody ActivateUserDTO activationCode) {
         return userService.activation(activationCode);
     }
 
     @Override
-    public ResponseEntity<?> resendCode(@Valid @RequestBody String email) {
+    public ResponseEntity<?> resendCode(@Valid @RequestBody ResendCodeEmailDTO email) {
        return userService.resendCode(email);
     }
 }

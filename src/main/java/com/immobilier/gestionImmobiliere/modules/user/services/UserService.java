@@ -12,8 +12,10 @@ import com.immobilier.gestionImmobiliere.exceptions.EmailAlreadyExistsException;
 import com.immobilier.gestionImmobiliere.exceptions.InvalidEmailException;
 import com.immobilier.gestionImmobiliere.exceptions.InvalidPasswordException;
 import com.immobilier.gestionImmobiliere.exceptions.RoleNotFoundException;
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ActivateUserDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.AuthenticateDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.requests.CreateUserDTO;
+import com.immobilier.gestionImmobiliere.modules.user.dto.requests.ResendCodeEmailDTO;
 import com.immobilier.gestionImmobiliere.modules.user.dto.responses.UserInfoDTO;
 import com.immobilier.gestionImmobiliere.modules.user.jwt.JwtUtils;
 import com.immobilier.gestionImmobiliere.modules.user.jwtService.UserDetailsImpl;
@@ -80,9 +82,7 @@ public class UserService {
                 .token(jwtCookie)
                 .build();
 
-
             return buildSuccessResponse(HttpStatus.OK, "Authentification réussie", "LOGIN_SUCCESS", userInfo);
-
     }
 
     @Transactional
@@ -141,12 +141,12 @@ public class UserService {
         // Envoyer le code (toujours)
         notificationService.envoyer(pending.getEmail(),pending.getNom(), pending.getCode());
 
-        return buildSuccessResponse(HttpStatus.CREATED,"Utilisateur temporaire "+ createUserDTO.getEmail() +" créé avec succès. Un email d'activation vous a été envoyé.", "TEMP_USER_CREATED",null);
+        return buildSuccessResponse(HttpStatus.CREATED,"Utilisateur temporaire "+" créé avec succès. Un code d'activation vous a été envoyé sur "+createUserDTO.getEmail(), "TEMP_USER_CREATED",null);
     }
     @Transactional
-    public ResponseEntity<?> activation(Map<String, String> activation) {
-        //Validation validation = validationService.lireEnFontionDuCode(activation.get("code"));
-        PendingRegistration pending = pendingRegistrationRepository.findByCodeWithLock(activation.get("code"))
+    public ResponseEntity<?> activation(ActivateUserDTO activationCode) {
+
+        PendingRegistration pending = pendingRegistrationRepository.findByCodeWithLock(activationCode.getCode())
                 .orElseThrow(() -> new RuntimeException("Code de validation invalide"));
 
         if(Instant.now().isAfter(pending.getExpiration())){
@@ -172,10 +172,6 @@ public class UserService {
         user.initTimestamp();
         userRepository.save(user);
         pendingRegistrationRepository.delete(pending);
-//        validationService.enregistrer(user);
-//        User utilisateurActiver = userRepository.findById(validation.getUser().getIdUser()).orElseThrow(()-> new RuntimeException("utilisateur inconnu"));
-//        utilisateurActiver.setFlagActif(true);
-//        userRepository.save(utilisateurActiver);
         return  buildSuccessResponse(HttpStatus.OK, "Compte activé avec succès", "ACCOUNT_ACTIVATED",null);
     }
 
@@ -216,9 +212,9 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<?> resendCode(String email) {
+    public ResponseEntity<?> resendCode(ResendCodeEmailDTO resendCodeEmailDTO) {
 
-        PendingRegistration pending = pendingRegistrationRepository.findByEmailWithLock(email)
+        PendingRegistration pending = pendingRegistrationRepository.findByEmailWithLock(resendCodeEmailDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("Aucune demande d'inscription en cours"));
 
         // Vérifier le nombre de tentatives
@@ -238,7 +234,7 @@ public class UserService {
 
         // Renvoyer le code
         notificationService.envoyer(pending.getEmail(),pending.getNom(), newCode);
-        return buildSuccessResponse(HttpStatus.OK,"Un nouveau code a été envoyé à " +email,"CODE_RESENT",newCode);
+        return buildSuccessResponse(HttpStatus.OK,"Un nouveau code a été envoyé à " +resendCodeEmailDTO.getEmail(),"CODE_RESENT",newCode);
     }
 
     @Transactional
